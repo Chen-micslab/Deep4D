@@ -4,7 +4,7 @@ Deep4D is a deep learning model which could predict ion mobility, retention time
 If necessary, Deep4D can also provide separate ion mobility, retention time, fragment intensity or charge state prediction functions.
 ## Guide to generate a 4D library 
 ### 1. Prepare peptide list
-The peptide list should be stored in a comma-separated values (CSV) file including two column:'Peptide','Charge'. This CSV file should be stored at the directory 'Deep4D/Deep4D/dataset/data'
+The peptide list should be stored in a comma-separated values (CSV) file including two column:'Peptide', 'Charge'. This CSV file should be stored at the directory 'Deep4D/Deep4D/dataset/data'
 ```
 Peptide,Charge
 AAAAAAAAGAFAGR,2
