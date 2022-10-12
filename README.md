@@ -92,7 +92,7 @@ Run `'Deep4D/Deep4D/dataset/Encoding_rt.py'`.
 python Encoding_rt.py --filename 'train_rt' --label 1
 ```
 If rt label exist, label = 1. If no label rt exist, label = 0.
-#### 3. Train ccs model
+#### 3. Train rt model
 Run `'Deep4D/Deep4D/train_rt.py'`. 
 ```
 python train_rt.py --filename 'train_rt' --load_param_dir './checkpoint/rt.pth' --lr 0.00001 --batch_size 50
