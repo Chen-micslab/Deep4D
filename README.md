@@ -74,7 +74,7 @@ python train_ccs.py --filename 'ccs_data' --load_ccs_param_dir './checkpoint/ccs
 --filename: Training data name.  
 --load_ccs_param_dir: The file directory of pre-trained ccs model.  
 --lr: Learning rate.  
-Finally, find the parameters file at './checkpoint/ccs_data_ccs/'
+Finally, find the parameters file at './checkpoint/{ccs_data}_ccs/'
 ### b. Train rt model  
 #### 1. Prepare the training data
 The training data should be stored in a comma-separated values (CSV) file including two columns:'Peptide', 'RT'. This CSV file should be stored at the directory 'Deep4D/Deep4D/dataset/data/rt_data.csv'.
@@ -101,7 +101,7 @@ python train_rt.py --filename 'rt_data' --load_param_dir './checkpoint/rt.pth' -
 --filename: Training data name.  
 --load_rt_param_dir: The file directory of pre-trained rt model.  
 --lr: Learning rate.  
-Finally, find the parameters file at './checkpoint/rt_data_rt/'
+Finally, find the parameters file at './checkpoint/{rt_data}_rt/'
 ### c. Train msms model  
 #### 1. Prepare the training data
 The training data should be stored in a comma-separated values (CSV) file including seven columns: 'Peptide', 'Charge', 'FI.Charge', 'FI.FrgType', 'FI.FrgNum', 'FI.LossType', 'FI.Intensity'. This CSV file should be stored at the directory 'Deep4D/Deep4D/dataset/data/msms_data.csv'.
@@ -132,4 +132,4 @@ python train_msms.py --filename 'msms_data' --load_msms_param_dir './checkpoint/
 --load_msms_param_dir: The file directory of pre-trained msms model.  
 --lr: Learning rate.  
 --type: The neutral loss type of msms spectrum. Now Deep4D contains two type 'DeepDIA' and 'DeepPhospho'. 'DeepDIA': NH3 and H20, 'DeepPhospho': H3PO4.  
-Finally, find the parameters file at './checkpoint/msms_data_{type}/'
+Finally, find the parameters file at './checkpoint/{msms_data}_{type}/'
