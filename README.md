@@ -65,7 +65,7 @@ Run `'Deep4D/Deep4D/dataset/Encoding_ccs.py'`.
 ```
 python Encoding_ccs.py --filename 'ccs_data' --label 1
 ```
-If label ccs exist, label = 1. If no label ccs exist, label = 0.
+--label: If label ccs exist, label = 1. If no label ccs exist, label = 0.
 #### 3. Train ccs model
 Run `'Deep4D/Deep4D/train_ccs.py'`. 
 ```
@@ -91,7 +91,7 @@ Run `'Deep4D/Deep4D/dataset/Encoding_rt.py'`.
 ```
 python Encoding_rt.py --filename 'rt_data' --label 1
 ```
-If label rt exist, label = 1. If no label rt exist, label = 0.
+--label: If label rt exist, label = 1. If no label rt exist, label = 0.
 #### 3. Train rt model
 Run `'Deep4D/Deep4D/train_rt.py'`. 
 ```
@@ -116,9 +116,11 @@ aAAAGSAAVsGAGtPVAGPTGR,2,1,y,6,noloss,0.8539
 #### 2. Encoding peptide
 Run `'Deep4D/Deep4D/dataset/Encoding_msms.py'`. 
 ```
-python Encoding_msms.py --filename 'msms_data' --label 1
+python Encoding_msms.py --filename 'msms_data' --label 1 --type 'DeepDIA' --maxcharge 3
 ```
-If label msms exist, label = 1. If no label msms exist, label = 0.
+--label: If label msms exist, label = 1. If no label msms exist, label = 0.
+--type: The neutral loss type of msms spectrum. Now Deep4D contains two type 'DeepDIA' and 'DeepPhospho'. 'DeepDIA': NH3 and H20, 'DeepPhospho': H3PO4.
+--maxcharge: the maximum charge in peptide list, the charge range would in [2,maxcharge], the recommended range is [2,4]  
 #### 3. Train msms model
 Run `'Deep4D/Deep4D/train_msms.py'`. 
 ```
