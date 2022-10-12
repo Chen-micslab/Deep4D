@@ -1,1 +1,0 @@
-Training and test set of each dataset are shown as 'train' and 'test' file. Deep4D was trained with training set and then tested on the test set, the prediction results of test set was in the 'test_pre' file.
