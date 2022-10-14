@@ -104,7 +104,7 @@ python train_rt.py --filename 'rt_data' --load_param_dir './checkpoint/rt.pth' -
 Finally, find the parameters file at './checkpoint/{rt_data}_rt/'
 ### c. Train msms model  
 #### 1. Prepare the training data
-The training data should be stored in a comma-separated values (CSV) file including seven columns: 'Peptide', 'Charge', 'FI.Charge', 'FI.FrgType', 'FI.FrgNum', 'FI.LossType', 'FI.Intensity'. This CSV file should be stored at the directory 'Deep4D/Deep4D/dataset/data/msms_data.csv'.
+The training data should be stored in a comma-separated values (CSV) file including seven columns: 'Peptide', 'Charge', 'FI.Charge', 'FI.FrgType', 'FI.FrgNum', 'FI.LossType', 'FI.Intensity'. This CSV file should be stored at the directory 'Deep4D/MSMS/dataset/data/msms_data.csv'.
 ```
 Peptide,Charge,FI.Charge,FI.FrgType,FI.FrgNum,FI.LossType,FI.Intensity
 aAAAGSAAVsGAGtPVAGPTGR,2,1,b,4,noloss,0.1500
@@ -116,7 +116,7 @@ aAAAGSAAVsGAGtPVAGPTGR,2,1,b,7,noloss,0.4741
 aAAAGSAAVsGAGtPVAGPTGR,2,1,y,6,noloss,0.8539
 ```
 #### 2. Encoding peptide
-Run `'Deep4D/Deep4D/dataset/Encoding_msms.py'`. 
+Run `'Deep4D/MSMS/dataset/Encoding_msms.py'`. 
 ```
 python Encoding_msms.py --filename 'msms_data' --label 1 --type 'DeepDIA' --maxcharge 3
 ```
@@ -124,7 +124,7 @@ python Encoding_msms.py --filename 'msms_data' --label 1 --type 'DeepDIA' --maxc
 --type: The neutral loss type of msms spectrum. Now Deep4D contains two type 'DeepDIA' and 'DeepPhospho'. 'DeepDIA': NH3 and H20, 'DeepPhospho': H3PO4.
 --maxcharge: the maximum charge in peptide list, the charge range would in [2,maxcharge], the recommended range is [2,4]  
 #### 3. Train msms model
-Run `'Deep4D/Deep4D/train_msms.py'`. 
+Run `'Deep4D/MSMS/train_msms.py'`. 
 ```
 python train_msms.py --filename 'msms_data' --load_msms_param_dir './checkpoint/msms.pth' --lr 0.0001 --batch_size 50  --type 'DeepDIA'
 ```
