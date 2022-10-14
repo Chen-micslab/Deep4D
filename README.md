@@ -103,7 +103,7 @@ python Encoding_rt.py --filename 'rt_data' --label 1
 #### 3. Train rt model
 Run `'Deep4D/RT/train_rt.py'`. 
 ```
-python train_rt.py --filename 'rt_data' --load_param_dir './checkpoint/rt.pth' --lr 0.00001 --batch_size 50
+python train_rt.py --filename 'rt_data' --load_rt_param_dir './checkpoint/rt.pth' --lr 0.00001 --batch_size 50
 ```
 --filename: Training data name.  
 --load_rt_param_dir: The file directory of pre-trained rt model.  
@@ -112,7 +112,7 @@ Finally, find the parameters file at './checkpoint/{rt_data}_rt/'
 #### 4. Predict rt
 Run `'Deep4D/RT/predict_rt.py'`. 
 ```
-python predict_rt.py  --filename 'rt_test_data' --load_param_dir './checkpoint/rt.pth' --batch_size 50 --label 1
+python predict_rt.py  --filename 'rt_test_data' --load_rt_param_dir './checkpoint/rt.pth' --batch_size 50 --label 1
 ```
 --filename: Test data name, which was also encoded with step 2.  
 --label: If label rt exist, label = 1. If no label rt exist, label = 0.
@@ -154,3 +154,37 @@ python predict_msms.py  --filename 'msms_data' --load_msms_param_dir './checkpoi
 ```
 --filename: Test data name, which was also encoded with step 2.  
 --label: If label msms exist, label = 1. If no label msms exist, label = 0.
+### d. Train charge state model  
+#### 1. Prepare the training data
+The training data should be stored in a comma-separated values (CSV) file including seven columns: 'Peptide', 'Charge'. This CSV file should be stored at the directory 'Deep4D/Charge_state/dataset/data/charge_data.csv'.  
+```
+Peptide,Charge
+AAAAAAAAGAFAGR,2
+aAAAAAAAAVPSAAGR,5
+AAAAAATAPPSPGPAQPGPR,7
+AAAAALeSQQQSLQER,9
+AAAAAWEEPSSGNGTAR,3
+AAAAFVLsANENNIALFK,4
+```
+Here, the charge of each peptide is the sum of all its charge states. Example: a peptide with charge state 2 and 3, so its charge = 5.
+#### 2. Encoding peptide
+Run `'Deep4D/Charge_state/dataset/Encoding_charge.py'`. 
+```
+python Encoding_charge.py --filename 'charge_data' --label 1 
+```
+--label: If label msms exist, label = 1. If no label msms exist, label = 0.
+#### 3. Train charge model
+Run `'Deep4D/Charge_state/train_charge.py'`. 
+```
+python train_charge.py --filename 'charge_data' --load_param_dir './checkpoint/charge.pth' --lr 0.00001 --batch_size 50
+```
+--filename: Training data name.  
+--load_param_dir: The file directory of pre-trained charge model.  
+--lr: Learning rate.  
+Finally, find the parameters file at './checkpoint/{charge_data}_charge/'
+#### 4. Predict charge
+Run `'Deep4D/Charge_state/predict_rt.py'`. 
+```
+python predict_charge.py  --filename 'charge_test_data' --load_param_dir './checkpoint/charge.pth' --batch_size 50 
+```
+--filename: Test data name, which was also encoded with step 2.  
