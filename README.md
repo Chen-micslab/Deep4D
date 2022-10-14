@@ -187,4 +187,6 @@ Run `'Charge_state/predict_rt.py'`.
 ```
 python predict_charge.py  --filename 'charge_test_data' --load_param_dir './checkpoint/charge.pth' --batch_size 50 
 ```
---filename: Test data name, which was also encoded with step 2.  
+--filename: Test data name, which was also encoded with step 2. 
+## License
+Deep4D is distributed under an Apache License. See the LICENSE file for details.
