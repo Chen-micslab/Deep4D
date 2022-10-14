@@ -1,0 +1,163 @@
+import argparse
+import  logging
+import os
+import sys
+import time
+import numpy as  np
+import pandas as pd
+import torch
+import torch.nn as nn
+from torch import optim
+from tqdm import tqdm
+
+from dataset.Dataset_rt import Mydata_label, Mydata_nolabel
+from torch.utils.data import DataLoader, random_split
+from torch.utils.tensorboard import SummaryWriter
+from utils.Eval_rt_model import eval_model
+from model.selfatt_cnn_rt import Transformer
+
+def get_args():  ##设置需要传入的参数
+    parser = argparse.ArgumentParser(description='Predict RT')
+    parser.add_argument('--batch_size', type=int, default=100)
+    parser.add_argument('--feature_len', type=int, default=23)
+    parser.add_argument('--d_model', type=int, default=500)
+    parser.add_argument('--nheads', type=int, default=5)
+    parser.add_argument('--num_encoder_layers', type=int, default=5)
+    parser.add_argument('--dim_feedforward', type=int, default=1200)
+    parser.add_argument('--dropout', type=float, default=0)
+    parser.add_argument('--rt_norm', type=float, default=10)  
+    parser.add_argument('--activation', type=str, default='relu')
+    parser.add_argument('--output_dir', type=str, default='./output')  
+    parser.add_argument('--load_rt_param_dir', type=str, default=None)  
+    parser.add_argument('--seed', type=int, default=1)  
+    parser.add_argument('--filename', type=str, default=None)
+    parser.add_argument('--label', type=int, default=1)  ### 1:label, 0:nolabel
+    parser.add_argument('--slice', type=int, default='1')
+    return parser.parse_args()
+
+def get_mask(peptide,length): 
+    mask = torch.zeros(peptide.size(0),peptide.size(1))  
+    for i in range(length.size(0)):
+        mask[i, :int(length[i])] = 1 
+    return  mask
+
+def predict_label_rt(args):
+    data_dir = f'./dataset/data/{args.filename}'
+    torch.cuda.manual_seed(args.seed)
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  ##判断使用GPU还是CPU
+    model = Transformer(feature_len=args.feature_len,
+                        d_model=args.d_model,
+                        nhead=args.nheads,
+                        num_encoder_layers=args.num_encoder_layers,
+                        dim_feedforward=args.dim_feedforward,
+                        dropout=args.dropout,
+                        activation=args.activation)
+    if args.load_rt_param_dir:
+        model.load_state_dict(torch.load(args.load_rt_param_dir, map_location=device))
+    model.to(device=device)
+    model.eval()  ##将model调整为eval模式
+    test_data = Mydata_label(data_dir)
+    total_lenth = len(test_data)
+    test_loader = DataLoader(test_data, batch_size=args.batch_size, shuffle=False, num_workers=3, pin_memory=True)
+    n_val = len(test_loader)  # val中的batch数量
+    norm = args.rt_norm
+    index = 0
+    total_peptide = np.zeros(total_lenth, dtype=object)
+    total_peptide_charge = torch.zeros(total_lenth).to(device=device, dtype=torch.float32)
+    RT = torch.zeros(total_lenth).to(device=device, dtype=torch.float32)
+    RT_pre = torch.zeros(total_lenth).to(device=device, dtype=torch.float32)
+    with tqdm(total=n_val, desc='Prediction round', unit='batch', leave=False) as pbar:
+        for batch in test_loader:
+            peptide = batch['peptide_onehot'].to(device=device, dtype=torch.float32)
+            rt = batch['rt'].to(device=device, dtype=torch.float32)
+            rt  = rt/norm
+            length = batch['length'].to(device=device, dtype=torch.float32)
+            charge = batch['charge'].to(device=device, dtype=torch.float32)
+            peptide_seq = np.array(batch['peptide'])
+            mask = get_mask(peptide, length).to(device=device, dtype=torch.bool)
+            with torch.no_grad():  ##不生成梯度，减少运算量
+                rt_pre = model(src=peptide, src_key_padding_mask=mask).view(charge.size(0))
+                id = charge.size(0)
+                total_peptide[index:(index+id)] = peptide_seq
+                RT[index:(index + id):] = rt
+                RT_pre[index:(index+id):] = rt_pre
+                total_peptide_charge[index:(index+id)] = charge
+                index = index + id
+            pbar.update()
+    tot_ARE = (torch.abs(RT - RT_pre)).mean()
+    print('MAE:', tot_ARE * norm)
+    RT = RT.unsqueeze(1) * norm
+    RT_pre = RT_pre.unsqueeze(1) * norm
+    total_peptide_charge = total_peptide_charge.unsqueeze(1)
+    total_peptide = np.expand_dims(np.array(total_peptide), axis=1)
+    data_total = torch.cat((total_peptide_charge,RT, RT_pre), 1)
+    data_total = data_total.to(device='cpu', dtype=torch.float32).numpy()
+    data = np.column_stack((total_peptide,data_total))
+    data = pd.DataFrame(data, columns=['Peptide', 'Charge', 'RT', 'rt_pre'])
+    data.to_csv(f'./dataset/data/output/{args.filename}_rt_pre.csv', index=False)  # 保存所有的预测值和真实值到一个CSV文件
+
+def predict_nolabel_rt(args, task_dir = None):
+    if args.Merged_predict:
+        file_dir = task_dir
+    else:
+        file_dir = './dataset/data'
+    slice = args.slice
+    for slice_num in range(slice):
+        print(f'{slice_num}/{slice} slices in rt prediction...........')
+        data_dir = f'{file_dir}/{args.filename}_slice{slice_num}'
+        torch.cuda.manual_seed(args.seed)
+        torch.manual_seed(args.seed)
+        np.random.seed(args.seed)
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  ##判断使用GPU还是CPU
+        model = Transformer(feature_len=args.feature_len,
+                            d_model=args.d_model,
+                            nhead=args.nheads,
+                            num_encoder_layers=args.num_encoder_layers,
+                            dim_feedforward=args.dim_feedforward,
+                            dropout=args.dropout,
+                            activation=args.activation)
+        if args.load_rt_param_dir:
+            model.load_state_dict(torch.load(args.load_rt_param_dir, map_location=device))
+        model.to(device=device)
+        model.eval()  ##将model调整为eval模式
+        test_data = Mydata_nolabel(data_dir)
+        total_lenth = len(test_data)
+        test_loader = DataLoader(test_data, batch_size=args.batch_size, shuffle=False, num_workers=3, pin_memory=True)
+        n_val = len(test_loader)  # val中的batch数量
+        norm = args.rt_norm
+        index = 0
+        total_peptide = np.zeros(total_lenth, dtype=object)
+        total_peptide_charge = torch.zeros(total_lenth).to(device=device, dtype=torch.float32)
+        RT_pre = torch.zeros(total_lenth).to(device=device, dtype=torch.float32)
+        with tqdm(total=n_val, desc='Prediction round', unit='batch', leave=False) as pbar:
+            for batch in test_loader:
+                peptide = batch['peptide_onehot'].to(device=device, dtype=torch.float32)
+                length = batch['length'].to(device=device, dtype=torch.float32)
+                charge = batch['charge'].to(device=device, dtype=torch.float32)
+                peptide_seq = np.array(batch['peptide'])
+                mask = get_mask(peptide, length).to(device=device, dtype=torch.bool)
+                with torch.no_grad():  ##不生成梯度，减少运算量
+                    rt_pre = model(src=peptide, src_key_padding_mask=mask).view(charge.size(0))
+                    id = charge.size(0)
+                    total_peptide[index:(index+id)] = peptide_seq
+                    RT_pre[index:(index+id)] = rt_pre
+                    total_peptide_charge[index:(index+id)] = charge
+                    index = index + id
+                pbar.update()
+        RT_pre = RT_pre.unsqueeze(1) * norm
+        total_peptide_charge = total_peptide_charge.unsqueeze(1)
+        total_peptide = np.expand_dims(np.array(total_peptide), axis=1)
+        data_total = torch.cat((total_peptide_charge, RT_pre), 1)
+        data_total = data_total.to(device='cpu', dtype=torch.float32).numpy()
+        data = np.column_stack((total_peptide,data_total))
+        data = pd.DataFrame(data, columns=['Peptide', 'Charge', 'rt_pre'])
+        data.to_csv(f'{file_dir}/output/{args.filename}_slice{slice_num}_pre_rt.csv', index=False)  # 保存所有的预测值和真实值到一个CSV文件
+        
+if __name__ == '__main__':
+    args = get_args()  ##生成参数列表
+    if args.label == 1:
+        predict_label_rt(args)
+    else:
+        predict_nolabel_rt(args)
