@@ -17,7 +17,7 @@ AAAAFVLsANENNIALFK,2
 The PTM contain phosphorylation of serine, threonine and tyrosine, oxidation of methionine and acetylation on N-terminal of proteins. They are represented as: S(phos)--s, T(phos)--t, Y(phos)--y, M(oxid)--e, acetylation--a.
 
 ### 2. Generate 4D library
-The generation of 4D library is executed through this script 'Deep4D/Deep4D/predict_4d_library.py'. The parameters of ccs model, rt model and msms model are required and should be stored as 'pth' file at the directory 'Deep4D/Deep4D/checkpoint'.   
+The generation of 4D library is executed through this script 'Deep4D/predict_4d_library.py'. The parameters of ccs model, rt model and msms model are required and should be stored as 'pth' file at the directory 'Deep4D/checkpoint'.   
 Run `'Deep4D/predict_4d_library.py'`.  
 Example:
 ```
