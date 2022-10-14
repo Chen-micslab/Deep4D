@@ -80,7 +80,7 @@ Run `'Deep4D/CCS/predict_ccs.py'` for single charge state or `'Deep4D/CCS/predic
 ```
 python train_ccs_z.py --filename 'ccs_test_data' --load_ccs_param_dir './checkpoint/ccs.pth' --batch_size 50 --label 1
 ```
---filename: Test data name, which was also encoded with step 2.
+--filename: Test data name, which was also encoded with step 2.  
 --label: If label ccs exist, label = 1. If no label ccs exist, label = 0.
 ### b. Train rt model  
 #### 1. Prepare the training data
@@ -114,7 +114,7 @@ Run `'Deep4D/RT/predict_rt.py'`.
 ```
 python predict_rt.py  --filename 'rt_test_data' --load_param_dir './checkpoint/rt.pth' --batch_size 50 --label 1
 ```
---filename: Test data name, which was also encoded with step 2.
+--filename: Test data name, which was also encoded with step 2.  
 --label: If label rt exist, label = 1. If no label rt exist, label = 0.
 ### c. Train msms model  
 #### 1. Prepare the training data
@@ -152,5 +152,5 @@ Run `'Deep4D/MSMS/predict_msms.py'`.
 ```
 python predict_msms.py  --filename 'msms_data' --load_msms_param_dir './checkpoint/msms.pth' --batch_size 50  --type 'DeepDIA' --label 1
 ```
---filename: Test data name, which was also encoded with step 2.
+--filename: Test data name, which was also encoded with step 2.  
 --label: If label msms exist, label = 1. If no label msms exist, label = 0.
