@@ -67,14 +67,21 @@ python Encoding_ccs.py --filename 'ccs_data' --label 1
 ```
 --label: If label ccs exist, label = 1. If no label ccs exist, label = 0.
 #### 3. Train ccs model
-Run `'Deep4D/CCS/train_ccs.py'`. 
+Run `'Deep4D/CCS/train_ccs.py'` for single charge state or `'Deep4D/CCS/train_ccs_z.py'` for multiple charge states. 
 ```
-python train_ccs.py --filename 'ccs_data' --load_ccs_param_dir './checkpoint/ccs.pth' --lr 0.00001 --batch_size 50
+python train_ccs_z.py --filename 'ccs_data' --load_ccs_param_dir './checkpoint/ccs.pth' --lr 0.00001 --batch_size 50
 ```
 --filename: Training data name.  
 --load_ccs_param_dir: The file directory of pre-trained ccs model.  
 --lr: Learning rate.  
 Finally, find the parameters file at './checkpoint/{ccs_data}_ccs/'
+#### 4. Predict ccs
+Run `'Deep4D/CCS/predict_ccs.py'` for single charge state or `'Deep4D/CCS/predict_ccs_z.py'` for multiple charge states.  
+```
+python train_ccs_z.py --filename 'ccs_test_data' --load_ccs_param_dir './checkpoint/ccs.pth' --batch_size 50 --label 1
+```
+--filename: Test data name, which was also encoded with step 2.
+--label: If label ccs exist, label = 1. If no label ccs exist, label = 0.
 ### b. Train rt model  
 #### 1. Prepare the training data
 The training data should be stored in a comma-separated values (CSV) file including two columns:'Peptide', 'RT'. This CSV file should be stored at the directory 'Deep4D/RT/dataset/data/rt_data.csv'.
@@ -102,6 +109,13 @@ python train_rt.py --filename 'rt_data' --load_param_dir './checkpoint/rt.pth' -
 --load_rt_param_dir: The file directory of pre-trained rt model.  
 --lr: Learning rate.  
 Finally, find the parameters file at './checkpoint/{rt_data}_rt/'
+#### 4. Predict rt
+Run `'Deep4D/RT/predict_rt.py'`. 
+```
+python predict_rt.py  --filename 'rt_test_data' --load_param_dir './checkpoint/rt.pth' --batch_size 50 --label 1
+```
+--filename: Test data name, which was also encoded with step 2.
+--label: If label rt exist, label = 1. If no label rt exist, label = 0.
 ### c. Train msms model  
 #### 1. Prepare the training data
 The training data should be stored in a comma-separated values (CSV) file including seven columns: 'Peptide', 'Charge', 'FI.Charge', 'FI.FrgType', 'FI.FrgNum', 'FI.LossType', 'FI.Intensity'. This CSV file should be stored at the directory 'Deep4D/MSMS/dataset/data/msms_data.csv'.
@@ -133,3 +147,10 @@ python train_msms.py --filename 'msms_data' --load_msms_param_dir './checkpoint/
 --lr: Learning rate.  
 --type: The neutral loss type of msms spectrum. Now Deep4D contains two type 'DeepDIA' and 'DeepPhospho'. 'DeepDIA': NH3 and H20, 'DeepPhospho': H3PO4.  
 Finally, find the parameters file at './checkpoint/{msms_data}_{type}/'
+#### 4. Predict msms
+Run `'Deep4D/MSMS/predict_msms.py'`. 
+```
+python predict_msms.py  --filename 'msms_data' --load_msms_param_dir './checkpoint/msms.pth' --batch_size 50  --type 'DeepDIA' --label 1
+```
+--filename: Test data name, which was also encoded with step 2.
+--label: If label msms exist, label = 1. If no label msms exist, label = 0.
