@@ -131,13 +131,13 @@ def predict_label_msms(args):
     data = pd.DataFrame(data, columns=['Peptide', 'Charge', 'cosine', 'SA', 'pearson', 'spearman'])
     data.to_csv(f'./dataset/data/output/{args.filename}_pre_perform.csv', index=False)
     print('Validation Mean cosine: {}'.format(np.mean(cosine)))
-    print('Validation Median cosine: {}%'.format(np.median(cosine)))
+    print('Validation Median cosine: {}'.format(np.median(cosine)))
     print('Validation Mean SA: {}'.format(np.mean(SA)))
-    print('Validation Median SA: {}%'.format(np.median(SA)))
+    print('Validation Median SA: {}'.format(np.median(SA)))
     print('Validation Mean pearson: {}'.format(np.mean(pearson)))
-    print('Validation Median pearson: {}%'.format(np.median(pearson)))
+    print('Validation Median pearson: {}'.format(np.median(pearson)))
     print('Validation Mean spearman: {}'.format(np.mean(spearman)))
-    print('Validation Median spearman: {}%'.format(np.median(spearman)))
+    print('Validation Median spearman: {}'.format(np.median(spearman)))
     num = 0
     pep = []
     m_z_list = []
