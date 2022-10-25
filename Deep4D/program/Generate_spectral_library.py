@@ -300,7 +300,7 @@ class change_to_peaks():
         data1 = np.array(data)
         if len(data1) > n:
             data2 = data1[np.argsort(-data1[:,-2])]
-            data3 = data2[:20,:]
+            data3 = data2[:n,:]
             data3 = pd.DataFrame(data3, columns=name)
             return data3
         else:
