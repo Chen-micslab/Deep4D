@@ -191,4 +191,4 @@ python predict_charge.py  --filename 'charge_test_data' --load_param_dir './chec
 ## License
 Deep4D is distributed under an Apache License. See the LICENSE file for details.
 ## Contacts
-Please report any problems directly to the github issue tracker. Also, you can send feedback to 1019524103@qq.com.
+Please report any problems directly to the github issue tracker. Also, you can send feedback to mr_chen@whu.edu.cn.
