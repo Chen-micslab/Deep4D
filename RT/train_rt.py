@@ -69,6 +69,8 @@ def train(model,device,epochs=10, batch_size=1,lr=0.001,val_percent=0.1,save_mp=
     else:
         train_data = Mydata_label(traindir)  ##导入dataset
         val_data = Mydata_label(validir)  ##导入dataset
+        n_val = len(val_data) ##计算validation data的数量
+        n_train = len(train_data)  ##计算train data的数量
     train_loader = DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=0,pin_memory=True)  ##生成train data
     val_loader = DataLoader(val_data, batch_size=batch_size, shuffle=True, num_workers=0, pin_memory=True,)  ##生成validation data
     writer = SummaryWriter(comment=f'LR_{lr}_BS_{batch_size}')
