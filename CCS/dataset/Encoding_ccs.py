@@ -85,7 +85,7 @@ def encoding_with_label(input, output):
         ccs = int(ccs_list[i] * 10000)
         num_id = str(num).zfill(7)
         if pep_len<50:
-            np.save(f'{output}_onehot/{num_id}_{peptide_list[i]}_${pep_len}$#{z}#.npy', onehot_arrary)
+            np.save(f'{output}_onehot/{num_id}_{peptide_list[i]}_${pep_len}$#{z}#@{ccs}@.npy', onehot_arrary)
 
 if __name__ == '__main__':
     args = get_args()
