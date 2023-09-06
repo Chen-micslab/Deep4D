@@ -70,7 +70,7 @@ def get_position_coding(max_len, d_model):
 def get_mask(peptide,length):
     mask = torch.zeros(peptide.size(0),peptide.size(1))
     for i in range(length.size(0)):
-        mask[i, :int(length[i])] = 1
+        mask[i, :int(length[i])] = 0
     return  mask
 
 z_to_matrix = {2:[1, 0, 0],
