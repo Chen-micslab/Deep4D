@@ -40,7 +40,7 @@ def get_args():  ##设置需要传入的参数
 def get_mask(peptide,length): 
     mask = torch.zeros(peptide.size(0),peptide.size(1))  
     for i in range(length.size(0)):
-        mask[i, :int(length[i])] = 1 
+        mask[i, :int(length[i])] = 0 
     return  mask
 
 def predict_label_rt(args):
