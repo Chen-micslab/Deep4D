@@ -4,6 +4,8 @@ Deep4D is a deep learning model which could predict ion mobility, retention time
 If necessary, Deep4D can also provide separate ion mobility, retention time, fragment intensity or charge state prediction functions.
 
 If you have any questions, you can send feedback to moran_chen123@foxmail.com.
+## Publications
+M. Chen, P. Zhu, Q. Wan, X. Ruan, P. Wu, Y. Hao, Z. Zhang, J. Sun, W. Nie, S. Chen*. High-Coverage Four-Dimensional Data-Independent Acquisition Proteomics and Phosphoproteomics Enabled by Deep Learning-Driven Multidimensional Predictions. Anal. Chem. 2023, 95, 7495–7502. https://pubs.acs.org/doi/10.1021/acs.analchem.2c05414
 ## Guide to generate a 4D library 
 ### 1. Prepare peptide list
 The peptide list should be stored in a comma-separated values (CSV) file including two column:'Peptide', 'Charge'. This CSV file should be stored at the directory 'Deep4D/dataset/data/peptide_list.csv'
