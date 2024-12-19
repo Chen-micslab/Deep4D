@@ -34,7 +34,7 @@ python predict_4d_library.py --filename 'peptide_list.csv' --load_msms_param_dir
 --load_rt_param_dir: the file directory of rt model  
 --maxcharge: the maximum charge in peptide list, the charge range would in [2,maxcharge], the recommended range is [2,4]  
 --type: The neutral loss type of msms spectrum. Now Deep4D contains two type 'DeepDIA' and 'DeepPhospho'. 'DeepDIA': NH3 and H20, 'DeepPhospho': H3PO4.  
---library: The type of 4D library. Now Deep4D contains only 'Peaks' which support PEAKS Online software.    
+--library: The type of 4D library. Now Deep4D contains the normal library which support DIA-NNsoftware and 'Peaks' which support PEAKS Online software.    
 --slice: If the scale of  peptide list is too large for your compute, you can slice the list. It should be set to an integer greater than 0.  
 --batch_size: The batch size.  
 #### 4D Library formats
