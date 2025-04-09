@@ -3,7 +3,7 @@
 Deep4D is a deep learning model which could predict ion mobility, retention time, fragment intensity and charge state of peptide to generate in silico 4D library for 4D DIA proteomics and phosphoproteomics.
 If necessary, Deep4D can also provide separate ion mobility, retention time, fragment intensity or charge state prediction functions.
 
-If you have any questions, you can send feedback to moran_chen123@foxmail.com.
+If you have any questions, you can send feedback to moranchen111@gmail.com.
 ## Publications
 M. Chen, P. Zhu, Q. Wan, X. Ruan, P. Wu, Y. Hao, Z. Zhang, J. Sun, W. Nie, S. Chen*. High-Coverage Four-Dimensional Data-Independent Acquisition Proteomics and Phosphoproteomics Enabled by Deep Learning-Driven Multidimensional Predictions. Anal. Chem. 2023, 95, 7495–7502. https://pubs.acs.org/doi/10.1021/acs.analchem.2c05414
 ## Guide to generate a 4D library 
@@ -195,4 +195,4 @@ python predict_charge.py  --filename 'charge_test_data' --load_param_dir './chec
 ## License
 Deep4D is distributed under an Apache License. See the LICENSE file for details.
 ## Contacts
-Please report any problems directly to the github issue tracker. Also, you can send feedback to moran_chen123@qq.com.
+Please report any problems directly to the github issue tracker. Also, you can send feedback to moranchen111@gmail.com.
